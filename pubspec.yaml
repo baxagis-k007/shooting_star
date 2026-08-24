@@ -1,0 +1,43 @@
+name: shooting_star
+description: "Shooting Star - application d'analyse vidéo, optimisée pour appareils bas de gamme."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # Sélection d'une vidéo depuis la galerie.
+  # Package officiel Flutter (flutter.dev/packages), très léger, pas de dépendances lourdes.
+  image_picker: ^1.1.2
+
+  # Lecture vidéo native (utilise le lecteur système Android en sous-couche = peu de RAM).
+  # Package officiel Flutter, pas de wrapper superflu.
+  video_player: ^2.9.2
+
+  # --- Étape 2 : Détection des objets ---
+
+  # Extrait UNE frame de la vidéo (via le décodeur natif Android), directement
+  # en mémoire, déjà réduite en taille. Beaucoup plus léger que de décoder
+  # toute la vidéo image par image.
+  video_thumbnail: any
+
+  # Manipulation d'image en Dart PUR (aucun binaire natif, contrairement à
+  # OpenCV). On l'utilise pour le niveaux de gris / seuillage / dessin des
+  # cadres. Volontairement préféré à OpenCV pour cette étape : pas de
+  # native build (~30-100 Mo de SDK téléchargé côté CI) à gérer, donc un
+  # pipeline Codemagic beaucoup plus fiable pour toi qui ne peux pas tester
+  # localement en cas d'échec de build.
+  image: any
+
+dev_dependencies:
+  flutter:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  
