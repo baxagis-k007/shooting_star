@@ -9,8 +9,9 @@ workflows:
       - name: Générer le dossier android manquant
         script: |
           flutter create --platforms=android .
-      - name: Désactiver newDsl (compatibilité anciens plugins)
+      - name: Désactiver AGP9 newDsl/builtInKotlin (compatibilité anciens plugins)
         script: |
+          echo "android.builtInKotlin=false" >> android/gradle.properties
           echo "android.newDsl=false" >> android/gradle.properties
       - name: Récupérer les dépendances
         script: |
