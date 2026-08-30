@@ -1,0 +1,27 @@
+workflows:
+  android-debug:
+    name: Android Debug
+    instance_type: mac_mini_m2
+    max_build_duration: 30
+    environment:
+      flutter: stable
+    scripts:
+      - name: Générer le dossier android manquant
+        script: |
+          flutter create --platforms=android .
+      - name: Forcer newDsl=false et builtInKotlin=false
+        script: |
+          sed -i '' '/android.newDsl/d' android/gradle.properties || true
+          sed -i '' '/android.builtInKotlin/d' android/gradle.properties || true
+          echo "android.newDsl=false" >> android/gradle.properties
+          echo "android.builtInKotlin=false" >> android/gradle.properties
+          echo "----- Contenu de gradle.properties -----"
+          cat android/gradle.properties
+      - name: Récupérer les dépendances
+        script: |
+          flutter pub get
+      - name: Build APK debug
+        script: |
+          flutter build apk --debug
+    artifacts:
+      - build/app/outputs/flutter-apk/*.apk
